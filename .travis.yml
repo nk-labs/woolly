@@ -1,18 +1,14 @@
 language: node_js
-branches:
-  only:
-  - master
-  - stage
 services:
 - docker
 before_install:
-- docker build -t cybercuffs/woolly .
+- docker build -t cybercuffs/woolly:woo .
+- docker run -d -p 80:8080 --name  go-helloworld cybercuffs/woolly:woo
+- docker exec -it go-helloworld /bin/sh -c "cd tests; go test"
+script:
+- docker ps | grep -q go-helloworld
 deploy:
   provider: script
-  script: bash docker/docker_push
+  script: bash deploy.sh
   on:
     branch: master
-env:
-  matrix:
-  - secure: Ejw4+p7byQgxCaOxRk33Exh1HtnqFjpAIckWa3/nV9EFhlMgJEsay7WRScu4tMRPmhvYpYLU+d1LA+jYxyIBqfniGufkEJ6vQx05jOffANBMzt+7w5ekfvDCOTvwJu7gJAgMFAMSQIbVd7Jmsgg3lo3hukbJFYFoOQ3qlKPCMsmCd8m/sUeKXiqKgGQrZ0+q3TczvG9nogNUTcKdof2fDXV/PcmkdLEbr3dsQIbYaN4URFXnI71p7vw2mRR1yGDBVeBjro2kYWrJ1ChvPSs7erLSYZFoXNEunDB47JmHZmwf9PL5+oFgJ5Kjx4Z3eGdqMqg2vM3gjWt3NGTKoz1PlkPIMCAbrf9QEACc103/dd0GYCByAS1Tc30ee3KBxOEmAM+fCFF1e85JYTUH6fHguNEN0dnoExpMADXcr8cECLF+3dU58orIGO05Oy92TZ/v9ubPU8jZWDAj/CeuBernBnkhxUqefH6074P3sQsRCxIo2WaFx80ecTGzrRNVWCDQwHqMWIM0Y85FrlRw8KFNHq2QJNeQI6YUOoyK7Cc+0iYZHEW1skH8jKbFibQ3WuPyPPMLoQL/IlqEwBmnoo/K3vM/6q3+860Rg/p2S0hHN9lLU9wUEqNoOKMqbmizHwYC7L9Le4bgD9XuCt/74gaYwKtIq+iJHGgxM3RokqNklJk=
-  - secure: f0spaYipydYUyRgPfq6MqyDa5DiMb2y0i8zwG0yuj9tWWBk1PxhvTmzK2QK+JsHGs1gisgN8zJl87gmJuRAFMbMcqK/pnYwkQvU0QS9xTP9qbzleSSzeSsyisGx3911EM8spTmiQtIWnv81usbdv/NdXEQ4K7yple+cfkDa+iO5qD8xXBZpLyb47XNb2LpWVuQuGZ1ydJG5sj2X+3Owb+pNNwZoozIawef1useS8nSAyFvp8kxZJQogHPDuMQYGyeIbtoeHYL79Z02Gpe/8xQMmokdHMyJw1iRtZsF/bqNYkLqVfol1xFWYPSzNvnghrvHpp9Vi1NbqS7RLlSiLPflamoB7OrXXat4EmgTrGjt9vd/m+ReG7uW311UBbpZ/2kQb6FioYiH/gNoiGzW0gSJXQPmAMBN+TeYj6A7C1+pFfUuk3AVdd2XDJpLsyHvarzpWbeYyLIXKEqoyS0/VauIf0wswnCDwQZjgd1mUnMwrKgK0J6E9vI5tQnKpOhYFlwpZZKHzyQsEHC1uyagcl7gzjUUBt03IiYXAUUCA/I1mPCix4uvFiK6SilUZBivz/QwCOibnNnpQvDQ4J9Dzua2Mfht16SoaBXyM8s5hg5hd62J8RW01z8VvFWNB4tpcQIejnRxKRQG1DH/tvTwzyfiX4w/LvorQRsYSM2L1Lpaw=
